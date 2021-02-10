@@ -20,10 +20,57 @@ import Tr from './Tr';
 
 import "./update.css";
 
+import { jsPDF } from "jspdf";
+import { keys } from 'lodash';
+
 export function Update({handleLoadData, updateReq, data}) {
   useInjectReducer({ key: 'update', reducer });
   useInjectSaga({ key: 'update', saga });
 
+  const doc = new jsPDF({
+    orientation: "landscape",
+  });
+
+  // function handleDownload(){
+  //   const source = window.document.getElementById("table");
+
+  //   doc.html(source, {
+  //     callback: function (doc) {
+  //       doc.save("arzu.pdf");
+  //     },
+      
+  //  })
+  // };
+
+  function handleDownload(){
+    const dressInfo = data.list.map(item => {
+      return {
+        dressId: item.dressId,
+        classRange: item.classRange,
+        gender: item.gender,
+        dressDetails: item.dressDetails,
+        dressSerial: item.dressSerial
+      }
+    })
+
+    console.log(dressInfo);
+
+    // doc.table(1, 1, [{dressId: "5", classRange: "df", gender: "df", dressDetails : "dsfg", dressSerial: "88"}, {dressId: "5", classRange: "df", gender: "df", dressDetails : "dsfg", dressSerial: "88"}], ["dressId", "classRange","gender", "dressDetails", "dressSerial"], { autoSize: true });
+
+    console.log(data.list);
+
+    doc.table(1, 1, dressInfo, ["dressId", "classRange","gender", "dressDetails", "dressSerial"], { autoSize: true });
+    
+    
+    // doc.fromHTML(source, 15, 15);
+
+    // doc.formHTML(source, 20, 20);
+
+    // doc.text(source, 10, 10);
+
+    doc.save("a4.pdf");
+    // doc.output("dataurlnewwindow");
+  }
 
   useEffect(() => {
     !data.list && handleLoadData();
@@ -49,7 +96,7 @@ export function Update({handleLoadData, updateReq, data}) {
   console.log(data.list);
   return <div>
     <h1>Update Page</h1>
-    <table style={{width: '100%', border: '1px solid gray'}}>
+    <table style={{width: '100%', border: '1px solid gray'}} id="table" >
       <thead>
         <tr>
           <th>Check</th>
@@ -67,6 +114,8 @@ export function Update({handleLoadData, updateReq, data}) {
         }
       </tbody>
     </table>
+
+    <button onClick={handleDownload}>Download PDF</button>
   </div>;
 }
 
