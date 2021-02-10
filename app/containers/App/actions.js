@@ -15,7 +15,7 @@
  *    }
  */
 
-import { LOAD_REPOS, LOAD_REPOS_SUCCESS, LOAD_REPOS_ERROR } from './constants';
+import { LOAD_REPOS, LOAD_REPOS_SUCCESS, LOAD_REPOS_ERROR, LOAD_DATA, LOAD_DATA_SUCCESS, LOAD_DATA_ERROR, POST_DATA, POST_DATA_SUCCESS, POST_DATA_ERROR, SET_INPUT_VALUE } from './constants';
 
 /**
  * Load the repositories, this action starts the request saga
@@ -25,6 +25,12 @@ import { LOAD_REPOS, LOAD_REPOS_SUCCESS, LOAD_REPOS_ERROR } from './constants';
 export function loadRepos() {
   return {
     type: LOAD_REPOS,
+  };
+}
+
+export function loadData() {
+  return {
+    type: LOAD_DATA,
   };
 }
 
@@ -44,6 +50,13 @@ export function reposLoaded(repos, username) {
   };
 }
 
+export function dataLoaded(data) {
+  return {
+    type: LOAD_DATA_SUCCESS,
+    data
+  };
+}
+
 /**
  * Dispatched when loading the repositories fails
  *
@@ -55,5 +68,39 @@ export function repoLoadingError(error) {
   return {
     type: LOAD_REPOS_ERROR,
     error,
+  };
+}
+
+export function dataLoadingError(error) {
+  return {
+    type: LOAD_DATA_ERROR,
+    error,
+  };
+}
+
+export function postData() {
+  return {
+    type: POST_DATA,
+  };
+}
+
+export function postDataSuccess(result) {
+  return {
+    type: POST_DATA_SUCCESS,
+    result
+  };
+}
+
+export function postDataError(err) {
+  return {
+    type: POST_DATA_ERROR,
+    err
+  };
+}
+
+export function input(value) {
+  return {
+    type: SET_INPUT_VALUE,
+    value
   };
 }

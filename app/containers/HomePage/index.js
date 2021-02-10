@@ -48,7 +48,7 @@ export function HomePage({
 
   useEffect(() => {
     // When initial state username is not null, submit the form to load repos
-    if (username && username.trim().length > 0) onSubmitForm();
+    onSubmitForm();
   }, []);
 
   const reposListProps = {
@@ -57,44 +57,37 @@ export function HomePage({
     repos,
   };
 
+  console.log(reposListProps);
   return (
     <article>
-      <Helmet>
-        <title>Home Page</title>
-        <meta
-          name="description"
-          content="A React.js Boilerplate application homepage"
-        />
-      </Helmet>
       <div>
-        <CenteredSection>
-          <H2>
-            <FormattedMessage {...messages.startProjectHeader} />
-          </H2>
-          <p>
-            <FormattedMessage {...messages.startProjectMessage} />
-          </p>
-        </CenteredSection>
         <Section>
-          <H2>
-            <FormattedMessage {...messages.trymeHeader} />
-          </H2>
-          <Form onSubmit={onSubmitForm}>
-            <label htmlFor="username">
-              <FormattedMessage {...messages.trymeMessage} />
-              <AtPrefix>
-                <FormattedMessage {...messages.trymeAtPrefix} />
-              </AtPrefix>
-              <Input
-                id="username"
-                type="text"
-                placeholder="mxstbr"
-                value={username}
-                onChange={onChangeUsername}
-              />
-            </label>
-          </Form>
-          <ReposList {...reposListProps} />
+          <table border="1px" style={{border: '1px solid black'}}>
+            <tbody>
+              <tr>
+                <th>classConfigId</th>
+                <th>class</th>
+                <th>group</th>
+                <th>applicantLimit</th>
+                <th>autoApprovedStatus</th>
+                <th>admissionExamStatus</th>
+              </tr>
+              {
+                repos.length > 0 && repos.map(repo => {
+                  return(
+                    <tr>
+                      <td>{repo.classConfigId}</td>
+                      <td>{repo.class}</td>
+                      <td>{repo.group}</td>
+                      <td>{repo.applicantLimit}</td>
+                      <td>{repo.autoApprovedStatus}</td>
+                      <td>{repo.admissionExamStatus}</td>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
         </Section>
       </div>
     </article>
@@ -120,10 +113,7 @@ const mapStateToProps = createStructuredSelector({
 export function mapDispatchToProps(dispatch) {
   return {
     onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
-    onSubmitForm: evt => {
-      if (evt !== undefined && evt.preventDefault) evt.preventDefault();
-      dispatch(loadRepos());
-    },
+    onSubmitForm: evt => dispatch(loadRepos()),
   };
 }
 

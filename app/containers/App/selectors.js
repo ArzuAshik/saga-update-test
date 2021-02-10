@@ -39,6 +39,23 @@ const makeSelectLocation = () =>
     routerState => routerState.location,
   );
 
+const makeSelectData = () =>
+  createSelector(
+    selectGlobal,
+    dataState => dataState.data,
+  );
+
+const makeSelectPostData = () =>
+  createSelector(
+    selectGlobal,
+    dataState => dataState.postResult,
+  );
+
+const makeSelectInputData = () =>
+  createSelector(
+    selectGlobal,
+    dataState => dataState.input,
+  );
 export {
   selectGlobal,
   makeSelectCurrentUser,
@@ -46,4 +63,7 @@ export {
   makeSelectError,
   makeSelectRepos,
   makeSelectLocation,
+  makeSelectData,
+  makeSelectPostData,
+  makeSelectInputData
 };
