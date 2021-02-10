@@ -34,7 +34,8 @@ export function* update(){
       },
       body: JSON.stringify(updateData.updateData)
     });
-    // console.log(list.item);
+    console.log(list);
+    window.alert(list.message);
     yield put(updateSuccess(updateData.updateData, updateData.list));
   } catch (err) {
     console.log(err);

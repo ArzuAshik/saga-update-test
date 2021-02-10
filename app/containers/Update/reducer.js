@@ -17,7 +17,7 @@ export const initialState = {
 
 
 function handleUpdate(updateData, list){
-  debugger;
+  // debugger;
   const index = list.findIndex((item) => item.dressId === updateData.dressId);
   list[index] = updateData;
   return list;

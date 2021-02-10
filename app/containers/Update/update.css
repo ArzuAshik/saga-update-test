@@ -1,0 +1,4 @@
+.not-editable input:focus,
+.not-editable input:focus-within {
+  outline: 0;
+}
