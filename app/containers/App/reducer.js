@@ -74,8 +74,9 @@ const appReducer = (state = initialState, action) =>
         break;
 
       case POST_DATA_ERROR:
-        draft.error = action.error;
+        draft.error = true;
         draft.loading = false;
+        draft.postResult = action.err;
         break;
 
       case SET_INPUT_VALUE:

@@ -24,6 +24,9 @@ function Header() {
         <HeaderLink to="/update">
           <FormattedMessage {...messages.update} />
         </HeaderLink>
+        <HeaderLink to="/post">
+          <FormattedMessage {...messages.post} />
+        </HeaderLink>
       </NavBar>
     </div>
   );

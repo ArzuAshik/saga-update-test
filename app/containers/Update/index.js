@@ -19,18 +19,28 @@ import { getList, updateRequest } from './actions';
 import Tr from './Tr';
 
 import "./update.css";
+import { keys } from 'lodash';
 
 import { jsPDF } from "jspdf";
-import { keys } from 'lodash';
+import 'jspdf-autotable';
+
+import image from './flower.jpg';
+
 
 export function Update({handleLoadData, updateReq, data}) {
   useInjectReducer({ key: 'update', reducer });
   useInjectSaga({ key: 'update', saga });
 
-  const doc = new jsPDF({
+  let doc = new jsPDF({
     orientation: "landscape",
+    unit: "mm",
+    format: 'a4'
   });
 
+  /*======================
+  table from html
+  ======================
+  */
   // function handleDownload(){
   //   const source = window.document.getElementById("table");
 
@@ -42,34 +52,103 @@ export function Update({handleLoadData, updateReq, data}) {
   //  })
   // };
 
+  /*======================
+  table from row data
+  ======================
+  */
+  // function handleDownload(){
+  //   const dressInfo = data.list.map(item => {
+  //     return {
+  //       dressId: item.dressId,
+  //       classRange: item.classRange,
+  //       gender: item.gender,
+  //       dressDetails: item.dressDetails,
+  //       dressSerial: item.dressSerial
+  //     }
+  //   })
+
+  //   const header = ["dressId", "classRange","gender", "dressDetails", "dressSerial"];
+
+  //   doc.table(1, 1, dressInfo, header, { autoSize: true });
+
+  //   doc.save("a4.pdf");
+  // }
+
+  /*======================
+  table using auto table
+  ======================
+  */
   function handleDownload(){
-    const dressInfo = data.list.map(item => {
-      return {
-        dressId: item.dressId,
-        classRange: item.classRange,
-        gender: item.gender,
-        dressDetails: item.dressDetails,
-        dressSerial: item.dressSerial
+
+    function addWaterMark(doc, img) {
+      var totalPages = doc.internal.getNumberOfPages();
+    
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        // doc.setTextColor(150);
+        // doc.text(80, 80, 'Watermark');
+        doc.addImage(img, 'JPEG', 0, 0, 300, 250);
+
       }
+    
+      return doc;
+    }
+    // without colSpan
+    // let body = data.list.map(item => {
+    //   return [
+    //     item.dressId,
+    //     item.classRange,
+    //     item.gender,
+    //     item.dressDetails,
+    //     item.dressSerial
+    //   ]
+    // })
+
+    // with colSpan
+    let body = data.list.map(item => {
+      return [
+        {content: item.dressId},
+        {content:item.classRange},
+        {content:item.gender},
+        {content:item.dressDetails, colSpan: 2},
+        {content:item.dressSerial}
+      ]
     })
 
-    console.log(dressInfo);
-
-    // doc.table(1, 1, [{dressId: "5", classRange: "df", gender: "df", dressDetails : "dsfg", dressSerial: "88"}, {dressId: "5", classRange: "df", gender: "df", dressDetails : "dsfg", dressSerial: "88"}], ["dressId", "classRange","gender", "dressDetails", "dressSerial"], { autoSize: true });
-
-    console.log(data.list);
-
-    doc.table(1, 1, dressInfo, ["dressId", "classRange","gender", "dressDetails", "dressSerial"], { autoSize: true });
+    const head = [{content: "Dress ID", styles: {textColor: [0, 0, 0]}}, {content: "class Range"}, {content: "Gender"}, {content: "Dress Details", /*colSpan: 2 */}, {content: "Dress Serial"}, "sl"];
     
     
-    // doc.fromHTML(source, 15, 15);
+    function makeTable(docx){
+      docx.setPage(1);
+      var finalY = 0
+      docx.text('From javascript arrays', 14, finalY + 15);
+      docx.autoTable({
+        startY: finalY + 20,
+        theme: 'grid',
+        headStyles: {halign: 'center', valign: 'middle', cellPadding: 2},
+        columnStyles:{
+          0: { cellWidth: 20, halign: 'center', fillColor: null },
+          1: { cellWidth: 30, halign: 'center', fillColor: null},
+          2: { cellWidth: 20, halign: 'center', fillColor: null},
+          3: { cellWidth: 'auto', colSpan: 2, fillColor: null},
+          4: { cellWidth: 20, halign: 'center', fillColor: null},
+          5: { cellWidth: 20, halign: 'center', fillColor: null},
+        },
+        head: [head],
+        body: body,
+      })
+      return docx;
+    }
 
-    // doc.formHTML(source, 20, 20);
+    const docTable = makeTable(doc);
+    doc = addWaterMark(docTable, image);
+    doc = makeTable(doc);
 
-    // doc.text(source, 10, 10);
 
-    doc.save("a4.pdf");
-    // doc.output("dataurlnewwindow");
+
+
+    doc.save("Dress Info.pdf");
+    body = [];
   }
 
   useEffect(() => {

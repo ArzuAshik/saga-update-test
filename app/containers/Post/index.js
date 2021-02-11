@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -25,7 +25,7 @@ export function Post({setInput, postHandle, postResult}) {
   useInjectSaga({ key: 'post', saga });
 
   const [inputs, setInputs] = useState({});
-  console.log(postResult);
+  
 
   function handleInput(e){
     const newInput = inputs;
@@ -37,9 +37,6 @@ export function Post({setInput, postHandle, postResult}) {
     setInputs(newInput);
   }
 
-  useEffect( ()=>{
-    setInputs({});
-  } , [inputs])
 
   function handleSubmit(){
     setInput(inputs);
@@ -53,15 +50,15 @@ export function Post({setInput, postHandle, postResult}) {
   }
   return <div>
     <h1>Post Page</h1>
-    <input value={inputs.classRange} style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="classRange" name="classRange"/>
+    <input style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="classRange" name="classRange"/>
     <br/>
-    <input value={inputs.cmsId} style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="cmsID" name="cmsId"/>
+    <input style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="cmsID" name="cmsId"/>
     <br/>
-    <input value={inputs.dressDetails} style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="dressDetails" name="dressDetails"/>
+    <input style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="dressDetails" name="dressDetails"/>
     <br/>
-    <input value={inputs.dressSerial} style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="dressSerial" name="dressSerial"/>
+    <input style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="dressSerial" name="dressSerial"/>
     <br/>
-    <input value={inputs.gender} style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="gender" name="gender"/>
+    <input style={style} onBlur={(e) => handleInput(e)} type="text" placeholder="gender" name="gender"/>
     <br/>
     <button style={style} onClick={handleSubmit}>Button</button>
     </div>;

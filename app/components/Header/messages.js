@@ -20,4 +20,8 @@ export default defineMessages({
     id: `${scope}.update`,
     defaultMessage: 'Update',
   },
+  post: {
+    id: `${scope}.post`,
+    defaultMessage: 'Insert Data',
+  },
 });
